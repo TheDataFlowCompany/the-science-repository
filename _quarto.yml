@@ -1,0 +1,17 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - reports/*.qmd
+
+website:
+  title: "The Science Repository"
+  navbar:
+    left:
+      - href: reports/01_overview.qmd
+        text: Overview
+
+format:
+  html:
+    theme: cosmo
+    toc: true

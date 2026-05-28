@@ -1,0 +1,38 @@
+---
+title: "Project overview"
+author: "Your Name"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: true
+bibliography: ../references/references.bib
+# csl: ../references/apa.csl   # uncomment once you've dropped a CSL file in references/
+execute:
+  warning: false
+  message: false
+---
+
+```{r setup}
+source(here::here("R", "01_setup.R"))
+```
+
+# What this report does
+
+A one-paragraph description of what you're analysing and why.
+
+# Data
+
+```{r}
+# data <- readr::read_csv(data_path("consumer_data.csv"))
+# head(data)
+```
+
+# Results
+
+Cite with `@smith2020` like this: as discussed by @smith2020, …
+
+# References
+
+::: {#refs}
+:::

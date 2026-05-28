@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{hyperref}
+
+\title{Your Title Here}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A short abstract goes here.
+\end{abstract}
+
+\section{Introduction}
+
+Cite Zotero references with \texttt{\textbackslash citep\{smith2020\}} \citep{smith2020}.
+
+\section{Methods}
+
+Embed figures saved by your R scripts:
+
+\begin{figure}[h]
+  \centering
+  % \includegraphics[width=0.8\textwidth]{../figures/fig_03_age_by_score.pdf}
+  \caption{An example figure.}
+\end{figure}
+
+\section{Results}
+
+\section{Discussion}
+
+\bibliographystyle{apa}
+\bibliography{../references/references}
+
+\end{document}

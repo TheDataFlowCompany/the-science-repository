@@ -1,49 +1,91 @@
-# History files
+# ---- R session & build artefacts ----
 .Rhistory
 .Rapp.history
-
-# Session Data files
 .RData
 .RDataTmp
-
-# User-specific files
 .Ruserdata
-
-# Example code in package build process
 *-Ex.R
-
-# Output files from R CMD build
 /*.tar.gz
-
-# Output files from R CMD check
 /*.Rcheck/
-
-# RStudio files
 .Rproj.user/
-
-# produced vignettes
-vignettes/*.html
-vignettes/*.pdf
-
-# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
-.httr-oauth
-
-# knitr and R markdown default cache directories
 *_cache/
 /cache/
-
-# Temporary files created by R markdown
 *.utf8.md
 *.knit.md
 
-# R Environment Variables
+# ---- Environment ----
 .Renviron
-
-# pkgdown site
-docs/
-
-# translation temp files
-po/*~
-
-# RStudio Connect folder
+.Rprofile.local
 rsconnect/
+
+# ---- renv: keep settings & lockfile, ignore the local library ----
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/staging/
+
+# ---- Quarto / knitr build artefacts ----
+/.quarto/
+*_files/
+*.html
+*.pdf
+# But DO commit the published site under docs/ and the manuscript PDFs in manuscript/output/
+!docs/**/*.html
+!docs/**/*.pdf
+!manuscript/output/*.pdf
+
+# ---- Sensitive data ----
+# Everything under data/raw/ and data/processed/ is private by default.
+# Only the README and .gitkeep are tracked.
+data/raw/**
+data/processed/**
+!data/raw/README.md
+!data/raw/.gitkeep
+!data/processed/README.md
+!data/processed/.gitkeep
+
+# Belt & suspenders: never commit common data formats anywhere,
+# even if someone drops one into a non-data folder by mistake.
+*.csv
+*.tsv
+*.sav
+*.dta
+*.xls
+*.xlsx
+*.parquet
+*.feather
+*.rds
+*.RData
+*.sqlite
+*.sqlite3
+*.db
+
+# ...except in data/mock/ (synthetic, safe to share) and any explicit overrides:
+!data/mock/**
+!shiny/data/**
+
+# ---- LaTeX intermediates ----
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.lof
+*.lot
+
+# ---- OS / editor noise ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# ---- Workshop context (private notes only, never the repo template) ----
+workshop_info/

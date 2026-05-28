@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      "Read(./data/raw/**)",
+      "Read(./data/processed/**)",
+      "Glob(./data/raw/**)",
+      "Glob(./data/processed/**)",
+      "Grep(./data/raw/**)",
+      "Grep(./data/processed/**)",
+      "Bash(cat ./data/raw/*)",
+      "Bash(cat ./data/processed/*)",
+      "Bash(head ./data/raw/*)",
+      "Bash(head ./data/processed/*)",
+      "Bash(less ./data/raw/*)",
+      "Bash(less ./data/processed/*)"
+    ]
+  }
+}

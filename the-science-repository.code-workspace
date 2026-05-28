@@ -1,0 +1,12 @@
+{
+  "folders": [
+    { "path": "." }
+  ],
+  "settings": {
+    "files.exclude": {
+      "renv/library": true,
+      "renv/staging": true,
+      ".Rproj.user": true
+    }
+  }
+}

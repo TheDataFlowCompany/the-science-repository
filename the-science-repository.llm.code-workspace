@@ -1,0 +1,23 @@
+{
+  "//": "LLM-safe workspace. Opens the repo with data/raw/ and data/processed/ hidden from the editor (and therefore from editor-integrated LLMs like Cursor, Continue, Copilot). Use this workspace on Day 3.",
+  "folders": [
+    { "name": "the-science-repository (LLM mode)", "path": "." }
+  ],
+  "settings": {
+    "files.exclude": {
+      "data/raw": true,
+      "data/processed": true,
+      "renv/library": true,
+      "renv/staging": true,
+      ".Rproj.user": true
+    },
+    "search.exclude": {
+      "data/raw": true,
+      "data/processed": true
+    },
+    "files.watcherExclude": {
+      "data/raw/**": true,
+      "data/processed/**": true
+    }
+  }
+}
