@@ -106,16 +106,31 @@ See [`.gitignore`](.gitignore) for the exact rules and [`data/README.md`](data/R
 
 ## Publishing
 
-One source, three folders. `quarto render` produces:
+One source file, three commands, three folders. The orchestration file is [`reports/00_walkthrough.qmd`](reports/00_walkthrough.qmd):
 
-| Output | Lands in | Notes |
-| --- | --- | --- |
-| Website (HTML) | [`docs/`](docs/) | GitHub Pages → "Deploy from branch" → `main`/`docs`. |
-| Paper PDF | [`manuscript/output/`](manuscript/output/) | Auto-moved by [`scripts/post_render.R`](scripts/post_render.R). Needs `tinytex`. |
-| Paper DOCX | [`manuscript/output/`](manuscript/output/) | For collaborators who don't use LaTeX. |
+```bash
+quarto render reports/00_walkthrough.qmd --to html   # -> docs/reports/00_walkthrough.html
+quarto render reports/00_walkthrough.qmd --to pdf    # -> manuscript/output/walkthrough.pdf
+quarto render reports/00_walkthrough.qmd --to docx   # -> manuscript/output/walkthrough.docx
+```
 
-The orchestration file is [`reports/00_walkthrough.qmd`](reports/00_walkthrough.qmd) — its YAML lists `html`, `pdf`, and `docx` formats so a single `quarto render` fills every folder.
+### How the routing works
 
+Quarto itself only knows one output folder: `output-dir: docs` (set in [`_quarto.yml`](_quarto.yml)). All formats land there first. A post-render hook then moves the non-HTML outputs to `manuscript/output/`:
+
+```yaml
+# _quarto.yml
+project:
+  type: website
+  output-dir: docs            # every render goes here first
+  post-render:
+    - scripts/post_render.R   # then this script moves .pdf and .docx out
+```
+
+[`scripts/post_render.R`](scripts/post_render.R) reads the `QUARTO_PROJECT_OUTPUT_FILES` env var (Quarto sets it to the list of files just produced), filters for `.pdf`/`.docx`, and moves them into `manuscript/output/`. HTML stays put so GitHub Pages can serve it. Add a third destination (e.g., slides) by editing those ~20 lines.
+
+- **GitHub Pages:** Settings → Pages → "Deploy from branch" → `main` / `docs`.
+- **PDF prerequisite:** `Rscript -e 'install.packages("tinytex"); tinytex::install_tinytex()'`. Without it, `--to pdf` fails; `--to html` and `--to docx` still work.
 - **For a hand-crafted journal manuscript:** edit `manuscript/main.tex` instead (Texifier or `tinytex::pdflatex()`), or push to Overleaf via git. See [`manuscript/README.md`](manuscript/README.md).
 - **App:** `shiny::runApp("shiny/")` locally, or deploy to shinyapps.io.
 

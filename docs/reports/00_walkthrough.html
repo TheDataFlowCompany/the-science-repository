@@ -169,7 +169,11 @@ div.csl-indent {
   <ul>
   <li><a href="#why-this-document-exists" id="toc-why-this-document-exists" class="nav-link active" data-scroll-target="#why-this-document-exists"><span class="header-section-number">1</span> Why this document exists</a>
   <ul class="collapse">
-  <li><a href="#how-to-render" id="toc-how-to-render" class="nav-link" data-scroll-target="#how-to-render"><span class="header-section-number">1.1</span> How to render</a></li>
+  <li><a href="#how-to-render" id="toc-how-to-render" class="nav-link" data-scroll-target="#how-to-render"><span class="header-section-number">1.1</span> How to render</a>
+  <ul class="collapse">
+  <li><a href="#how-does-quarto-know-where-each-format-goes" id="toc-how-does-quarto-know-where-each-format-goes" class="nav-link" data-scroll-target="#how-does-quarto-know-where-each-format-goes"><span class="header-section-number">1.1.1</span> How does Quarto know where each format goes?</a></li>
+  <li><a href="#pdf-prerequisite" id="toc-pdf-prerequisite" class="nav-link" data-scroll-target="#pdf-prerequisite"><span class="header-section-number">1.1.2</span> PDF prerequisite</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#day-1-the-scaffold" id="toc-day-1-the-scaffold" class="nav-link" data-scroll-target="#day-1-the-scaffold"><span class="header-section-number">2</span> Day 1 — The scaffold</a></li>
   <li><a href="#day-2-from-raw-to-results" id="toc-day-2-from-raw-to-results" class="nav-link" data-scroll-target="#day-2-from-raw-to-results"><span class="header-section-number">3</span> Day 2 — From raw to results</a>
@@ -235,38 +239,34 @@ div.csl-indent {
 <p>That is the whole point. Change a model in <code>R/functions/analysis.R</code> and the website, the PDF, the manuscript, and the Shiny app all update the next time you render. No copy-paste.</p>
 <section id="how-to-render" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="how-to-render"><span class="header-section-number">1.1</span> How to render</h2>
-<p>One command, three folders:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Output</th>
-<th>Lands in</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>00_walkthrough.html</code> (and the rest of the site)</td>
-<td><a href="../docs/"><code>docs/</code></a> → GitHub Pages</td>
-</tr>
-<tr class="even">
-<td><code>walkthrough.pdf</code></td>
-<td><a href="../manuscript/output/"><code>manuscript/output/</code></a></td>
-</tr>
-<tr class="odd">
-<td><code>walkthrough.docx</code></td>
-<td><a href="../manuscript/output/"><code>manuscript/output/</code></a></td>
-</tr>
-</tbody>
-</table>
-<p>The HTML/PDF/DOCX split is one source file, three formats. A post-render script (<a href="../scripts/post_render.R"><code>scripts/post_render.R</code></a>) moves the PDF and DOCX out of <code>docs/</code> and into <code>manuscript/output/</code> so the site folder stays HTML-only.</p>
-<p><strong>PDF requires a LaTeX engine.</strong> One-time setup:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tinytex"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To render only a subset of formats (e.g., if tinytex isn’t installed):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> html</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> html,docx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>One source file, three formats, three commands:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> html   <span class="co"># -&gt; docs/reports/00_walkthrough.html</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> pdf    <span class="co"># -&gt; manuscript/output/walkthrough.pdf</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> docx   <span class="co"># -&gt; manuscript/output/walkthrough.docx</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or render all three in one go: <code>quarto render reports/00_walkthrough.qmd</code>.</p>
+<section id="how-does-quarto-know-where-each-format-goes" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="how-does-quarto-know-where-each-format-goes"><span class="header-section-number">1.1.1</span> How does Quarto know where each format goes?</h3>
+<p>It doesn’t, on its own. Quarto puts <strong>every</strong> rendered file under <code>output-dir: docs</code> (set in <a href="../_quarto.yml"><code>_quarto.yml</code></a>). Routing then happens in two small steps:</p>
+<ol type="1">
+<li><strong><code>output-dir: docs</code></strong> sends all output to <code>docs/</code>. After a render, you would see <code>docs/reports/00_walkthrough.html</code>, <code>docs/reports/walkthrough.pdf</code>, <code>docs/reports/walkthrough.docx</code>.</li>
+<li><strong>A post-render script</strong> (<a href="../scripts/post_render.R"><code>scripts/post_render.R</code></a>) runs after every render and moves the <code>.pdf</code> and <code>.docx</code> files out of <code>docs/</code> and into <code>manuscript/output/</code>. HTML stays put.</li>
+</ol>
+<p>That post-render hook is wired in <code>_quarto.yml</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> docs</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">post-render</span><span class="kw">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> scripts/post_render.R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Quarto sets the environment variable <code>QUARTO_PROJECT_OUTPUT_FILES</code> to the list of files it just produced. The R script reads that variable, picks the <code>.pdf</code> and <code>.docx</code> entries, and moves them. The whole thing is ~20 lines — read it if you want to add a third destination later (e.g., <code>slides/</code> for RevealJS).</p>
+</section>
+<section id="pdf-prerequisite" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="pdf-prerequisite"><span class="header-section-number">1.1.2</span> PDF prerequisite</h3>
+<p>PDF needs a LaTeX engine. One-time setup:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tinytex"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you skip this, the <code>--to pdf</code> command will fail but <code>--to html</code> and <code>--to docx</code> will keep working.</p>
 <hr>
+</section>
 </section>
 </section>
 <section id="day-1-the-scaffold" class="level1" data-number="2">
@@ -1637,254 +1637,274 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to render</span></span>
 <span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>One command, three folders:</span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>One source file, three formats, three commands:</span>
 <span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render</span>
-<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>| Output | Lands in |</span>
-<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a>| --- | --- |</span>
-<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>| <span class="in">`00_walkthrough.html`</span> (and the rest of the site) | <span class="co">[</span><span class="ot">`docs/`</span><span class="co">](../docs/)</span> → GitHub Pages |</span>
-<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a>| <span class="in">`walkthrough.pdf`</span> | <span class="co">[</span><span class="ot">`manuscript/output/`</span><span class="co">](../manuscript/output/)</span> |</span>
-<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a>| <span class="in">`walkthrough.docx`</span> | <span class="co">[</span><span class="ot">`manuscript/output/`</span><span class="co">](../manuscript/output/)</span> |</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> html   <span class="co"># -&gt; docs/reports/00_walkthrough.html</span></span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> pdf    <span class="co"># -&gt; manuscript/output/walkthrough.pdf</span></span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> docx   <span class="co"># -&gt; manuscript/output/walkthrough.docx</span></span>
+<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>Or render all three in one go: <span class="in">`quarto render reports/00_walkthrough.qmd`</span>.</span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### How does Quarto know where each format goes?</span></span>
 <span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>The HTML/PDF/DOCX split is one source file, three formats. A post-render</span>
-<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>script (<span class="co">[</span><span class="ot">`scripts/post_render.R`</span><span class="co">](../scripts/post_render.R)</span>) moves the PDF</span>
-<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a>and DOCX out of <span class="in">`docs/`</span> and into <span class="in">`manuscript/output/`</span> so the site folder</span>
-<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a>stays HTML-only.</span>
-<span id="cb18-72"><a href="#cb18-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-73"><a href="#cb18-73" aria-hidden="true" tabindex="-1"></a>**PDF requires a LaTeX engine.** One-time setup:</span>
-<span id="cb18-74"><a href="#cb18-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-75"><a href="#cb18-75" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb18-76"><a href="#cb18-76" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tinytex"</span>)</span>
-<span id="cb18-77"><a href="#cb18-77" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span>
-<span id="cb18-78"><a href="#cb18-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-80"><a href="#cb18-80" aria-hidden="true" tabindex="-1"></a>To render only a subset of formats (e.g., if tinytex isn't installed):</span>
-<span id="cb18-81"><a href="#cb18-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-82"><a href="#cb18-82" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb18-83"><a href="#cb18-83" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> html</span>
-<span id="cb18-84"><a href="#cb18-84" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd <span class="at">--to</span> html,docx</span>
-<span id="cb18-85"><a href="#cb18-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-86"><a href="#cb18-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-87"><a href="#cb18-87" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>It doesn't, on its own. Quarto puts **every** rendered file under</span>
+<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a><span class="in">`output-dir: docs`</span> (set in <span class="co">[</span><span class="ot">`_quarto.yml`</span><span class="co">](../_quarto.yml)</span>). Routing then</span>
+<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a>happens in two small steps:</span>
+<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-72"><a href="#cb18-72" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`output-dir: docs`** sends all output to <span class="in">`docs/`</span>. After a render, you</span>
+<span id="cb18-73"><a href="#cb18-73" aria-hidden="true" tabindex="-1"></a>   would see <span class="in">`docs/reports/00_walkthrough.html`</span>, <span class="in">`docs/reports/walkthrough.pdf`</span>,</span>
+<span id="cb18-74"><a href="#cb18-74" aria-hidden="true" tabindex="-1"></a>   <span class="in">`docs/reports/walkthrough.docx`</span>.</span>
+<span id="cb18-75"><a href="#cb18-75" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**A post-render script** (<span class="co">[</span><span class="ot">`scripts/post_render.R`</span><span class="co">](../scripts/post_render.R)</span>)</span>
+<span id="cb18-76"><a href="#cb18-76" aria-hidden="true" tabindex="-1"></a>   runs after every render and moves the <span class="in">`.pdf`</span> and <span class="in">`.docx`</span> files out of</span>
+<span id="cb18-77"><a href="#cb18-77" aria-hidden="true" tabindex="-1"></a>   <span class="in">`docs/`</span> and into <span class="in">`manuscript/output/`</span>. HTML stays put.</span>
+<span id="cb18-78"><a href="#cb18-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a>That post-render hook is wired in <span class="in">`_quarto.yml`</span>:</span>
+<span id="cb18-80"><a href="#cb18-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-81"><a href="#cb18-81" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
+<span id="cb18-82"><a href="#cb18-82" aria-hidden="true" tabindex="-1"></a><span class="fu">project</span><span class="kw">:</span></span>
+<span id="cb18-83"><a href="#cb18-83" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
+<span id="cb18-84"><a href="#cb18-84" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> docs</span></span>
+<span id="cb18-85"><a href="#cb18-85" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">post-render</span><span class="kw">:</span></span>
+<span id="cb18-86"><a href="#cb18-86" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span>scripts/post_render.R</span>
+<span id="cb18-87"><a href="#cb18-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-88"><a href="#cb18-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-89"><a href="#cb18-89" aria-hidden="true" tabindex="-1"></a><span class="fu"># Day 1 — The scaffold</span></span>
-<span id="cb18-90"><a href="#cb18-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-91"><a href="#cb18-91" aria-hidden="true" tabindex="-1"></a>What you built yesterday is a **project**, not a folder. The difference:</span>
-<span id="cb18-92"><a href="#cb18-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-95"><a href="#cb18-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-96"><a href="#cb18-96" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-project-folders</span></span>
-<span id="cb18-97"><a href="#cb18-97" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "What every folder in this project does."</span></span>
-<span id="cb18-98"><a href="#cb18-98" aria-hidden="true" tabindex="-1"></a>folder_overview <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb18-99"><a href="#cb18-99" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Folder,        <span class="sc">~</span>Purpose,</span>
-<span id="cb18-100"><a href="#cb18-100" aria-hidden="true" tabindex="-1"></a>  <span class="st">"R/"</span>,           <span class="st">"Code: numbered scripts + reusable functions."</span>,</span>
-<span id="cb18-101"><a href="#cb18-101" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/mock/"</span>,   <span class="st">"Synthetic, committed, LLM-safe data."</span>,</span>
-<span id="cb18-102"><a href="#cb18-102" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/raw/"</span>,    <span class="st">"Real data. Gitignored."</span>,</span>
-<span id="cb18-103"><a href="#cb18-103" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/processed/"</span>, <span class="st">"Output of cleaning. Reproducible, gitignored."</span>,</span>
-<span id="cb18-104"><a href="#cb18-104" aria-hidden="true" tabindex="-1"></a>  <span class="st">"reports/"</span>,     <span class="st">"Quarto sources (this file)."</span>,</span>
-<span id="cb18-105"><a href="#cb18-105" aria-hidden="true" tabindex="-1"></a>  <span class="st">"docs/"</span>,        <span class="st">"Rendered website. GitHub Pages target."</span>,</span>
-<span id="cb18-106"><a href="#cb18-106" aria-hidden="true" tabindex="-1"></a>  <span class="st">"manuscript/"</span>,  <span class="st">"LaTeX paper."</span>,</span>
-<span id="cb18-107"><a href="#cb18-107" aria-hidden="true" tabindex="-1"></a>  <span class="st">"shiny/"</span>,       <span class="st">"Interactive app."</span>,</span>
-<span id="cb18-108"><a href="#cb18-108" aria-hidden="true" tabindex="-1"></a>  <span class="st">"references/"</span>,  <span class="st">"One .bib file used by both Quarto and LaTeX."</span>,</span>
-<span id="cb18-109"><a href="#cb18-109" aria-hidden="true" tabindex="-1"></a>  <span class="st">"figures/"</span>,     <span class="st">"Plots saved by scripts, shared by every output."</span></span>
-<span id="cb18-110"><a href="#cb18-110" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-111"><a href="#cb18-111" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(folder_overview)</span>
-<span id="cb18-112"><a href="#cb18-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-113"><a href="#cb18-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-114"><a href="#cb18-114" aria-hidden="true" tabindex="-1"></a>You also wrote a smart <span class="in">`.gitignore`</span> so real data can never be committed by</span>
-<span id="cb18-115"><a href="#cb18-115" aria-hidden="true" tabindex="-1"></a>accident, and an <span class="in">`.Renviron.example`</span> with one switch:</span>
-<span id="cb18-116"><a href="#cb18-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-117"><a href="#cb18-117" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-118"><a href="#cb18-118" aria-hidden="true" tabindex="-1"></a><span class="in">DATA_MODE=mock   # default — read from data/mock/</span></span>
-<span id="cb18-119"><a href="#cb18-119" aria-hidden="true" tabindex="-1"></a><span class="in">DATA_MODE=real   # only when you mean it — read from data/raw/</span></span>
-<span id="cb18-120"><a href="#cb18-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-121"><a href="#cb18-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-122"><a href="#cb18-122" aria-hidden="true" tabindex="-1"></a>Everything that follows in this document reads through <span class="in">`data_path()`</span>. Flip</span>
-<span id="cb18-123"><a href="#cb18-123" aria-hidden="true" tabindex="-1"></a><span class="in">`DATA_MODE`</span> and the entire analysis re-runs on a different dataset, with no</span>
-<span id="cb18-124"><a href="#cb18-124" aria-hidden="true" tabindex="-1"></a>edits to any script.</span>
-<span id="cb18-125"><a href="#cb18-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a><span class="fu"># Day 2 — From raw to results</span></span>
-<span id="cb18-127"><a href="#cb18-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-128"><a href="#cb18-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load the raw data</span></span>
-<span id="cb18-129"><a href="#cb18-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-132"><a href="#cb18-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-133"><a href="#cb18-133" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-raw</span></span>
-<span id="cb18-134"><a href="#cb18-134" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">load_raw_consumer_data</span>(<span class="st">"consumer_data_raw.csv"</span>)</span>
-<span id="cb18-135"><a href="#cb18-135" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(raw)</span>
-<span id="cb18-136"><a href="#cb18-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-137"><a href="#cb18-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-138"><a href="#cb18-138" aria-hidden="true" tabindex="-1"></a>The CSV is full of realistic mess: mixed-case column names, trailing</span>
-<span id="cb18-139"><a href="#cb18-139" aria-hidden="true" tabindex="-1"></a>whitespace, <span class="in">`-99`</span> missing codes, inconsistent gender labels, a reverse-scored</span>
-<span id="cb18-140"><a href="#cb18-140" aria-hidden="true" tabindex="-1"></a>item, scattered <span class="in">`NA`</span>s. See <span class="co">[</span><span class="ot">`data/mock/codebook.md`</span><span class="co">](../data/mock/codebook.md)</span></span>
-<span id="cb18-141"><a href="#cb18-141" aria-hidden="true" tabindex="-1"></a>for the full inventory.</span>
-<span id="cb18-142"><a href="#cb18-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-143"><a href="#cb18-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Clean it</span></span>
-<span id="cb18-144"><a href="#cb18-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-145"><a href="#cb18-145" aria-hidden="true" tabindex="-1"></a>The cleaning logic lives in <span class="co">[</span><span class="ot">`R/functions/data_loading.R`</span><span class="co">](../R/functions/data_loading.R)</span> so</span>
-<span id="cb18-146"><a href="#cb18-146" aria-hidden="true" tabindex="-1"></a>the cleaning script, this walkthrough, and the Shiny app all share one</span>
-<span id="cb18-147"><a href="#cb18-147" aria-hidden="true" tabindex="-1"></a>implementation:</span>
-<span id="cb18-148"><a href="#cb18-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-151"><a href="#cb18-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: clean</span></span>
-<span id="cb18-153"><a href="#cb18-153" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="fu">clean_consumer_data</span>(raw)</span>
-<span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(clean, participant_id, condition, gender,</span>
-<span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a>                             income_group, purchase_intention,</span>
-<span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a>                             perceived_value, price_sensitivity))</span>
-<span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a>What <span class="in">`clean_consumer_data()`</span> does (see source for the details): standardises</span>
-<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a>column names with <span class="in">`janitor::clean_names()`</span>, trims whitespace, recodes gender,</span>
-<span id="cb18-161"><a href="#cb18-161" aria-hidden="true" tabindex="-1"></a>turns <span class="in">`-99`</span> into <span class="in">`NA`</span>, reverses <span class="in">`bt_3_r`</span>, and averages each item set into a</span>
-<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a>scale score.</span>
-<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a><span class="fu">## Descriptives</span></span>
-<span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-168"><a href="#cb18-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-169"><a href="#cb18-169" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-desc</span></span>
-<span id="cb18-170"><a href="#cb18-170" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Outcomes by experimental condition."</span></span>
-<span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a>desc <span class="ot">&lt;-</span> <span class="fu">descriptives_by_condition</span>(clean)</span>
-<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(desc, <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visual first, model second</span></span>
-<span id="cb18-176"><a href="#cb18-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-179"><a href="#cb18-179" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-180"><a href="#cb18-180" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-pi-by-cond</span></span>
-<span id="cb18-181"><a href="#cb18-181" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Purchase intention by condition. Red points are condition means; bars are 95% CIs."</span></span>
-<span id="cb18-182"><a href="#cb18-182" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 7</span></span>
-<span id="cb18-183"><a href="#cb18-183" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
-<span id="cb18-184"><a href="#cb18-184" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_pi_by_condition</span>(clean)</span>
-<span id="cb18-185"><a href="#cb18-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-186"><a href="#cb18-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-187"><a href="#cb18-187" aria-hidden="true" tabindex="-1"></a><span class="in">`combined_frame`</span> shows a clear bump over <span class="in">`control`</span>. The scatter below</span>
-<span id="cb18-188"><a href="#cb18-188" aria-hidden="true" tabindex="-1"></a>suggests why: the conditions also raise <span class="in">`perceived_value`</span>, and perceived</span>
-<span id="cb18-189"><a href="#cb18-189" aria-hidden="true" tabindex="-1"></a>value strongly predicts purchase intention.</span>
-<span id="cb18-190"><a href="#cb18-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-193"><a href="#cb18-193" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-194"><a href="#cb18-194" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-mediation-scatter</span></span>
-<span id="cb18-195"><a href="#cb18-195" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Perceived value (mediator) versus purchase intention (outcome), by condition."</span></span>
-<span id="cb18-196"><a href="#cb18-196" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 7</span></span>
-<span id="cb18-197"><a href="#cb18-197" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
-<span id="cb18-198"><a href="#cb18-198" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_mediation_scatter</span>(clean)</span>
-<span id="cb18-199"><a href="#cb18-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-200"><a href="#cb18-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-201"><a href="#cb18-201" aria-hidden="true" tabindex="-1"></a><span class="fu">## Main effect: condition predicts purchase intention</span></span>
-<span id="cb18-202"><a href="#cb18-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-205"><a href="#cb18-205" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-206"><a href="#cb18-206" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-main-model</span></span>
-<span id="cb18-207"><a href="#cb18-207" aria-hidden="true" tabindex="-1"></a>fit_main <span class="ot">&lt;-</span> <span class="fu">fit_main_model</span>(clean)</span>
-<span id="cb18-208"><a href="#cb18-208" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(broom<span class="sc">::</span><span class="fu">tidy</span>(fit_main, <span class="at">conf.int =</span> <span class="cn">TRUE</span>), <span class="at">digits =</span> <span class="dv">3</span>)</span>
-<span id="cb18-209"><a href="#cb18-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-89"><a href="#cb18-89" aria-hidden="true" tabindex="-1"></a>Quarto sets the environment variable <span class="in">`QUARTO_PROJECT_OUTPUT_FILES`</span> to the</span>
+<span id="cb18-90"><a href="#cb18-90" aria-hidden="true" tabindex="-1"></a>list of files it just produced. The R script reads that variable, picks the</span>
+<span id="cb18-91"><a href="#cb18-91" aria-hidden="true" tabindex="-1"></a><span class="in">`.pdf`</span> and <span class="in">`.docx`</span> entries, and moves them. The whole thing is ~20 lines —</span>
+<span id="cb18-92"><a href="#cb18-92" aria-hidden="true" tabindex="-1"></a>read it if you want to add a third destination later (e.g., <span class="in">`slides/`</span> for</span>
+<span id="cb18-93"><a href="#cb18-93" aria-hidden="true" tabindex="-1"></a>RevealJS).</span>
+<span id="cb18-94"><a href="#cb18-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-95"><a href="#cb18-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### PDF prerequisite</span></span>
+<span id="cb18-96"><a href="#cb18-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-97"><a href="#cb18-97" aria-hidden="true" tabindex="-1"></a>PDF needs a LaTeX engine. One-time setup:</span>
+<span id="cb18-98"><a href="#cb18-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-99"><a href="#cb18-99" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb18-100"><a href="#cb18-100" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tinytex"</span>)</span>
+<span id="cb18-101"><a href="#cb18-101" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span>
+<span id="cb18-102"><a href="#cb18-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-103"><a href="#cb18-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-104"><a href="#cb18-104" aria-hidden="true" tabindex="-1"></a>If you skip this, the <span class="in">`--to pdf`</span> command will fail but <span class="in">`--to html`</span> and</span>
+<span id="cb18-105"><a href="#cb18-105" aria-hidden="true" tabindex="-1"></a><span class="in">`--to docx`</span> will keep working.</span>
+<span id="cb18-106"><a href="#cb18-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-107"><a href="#cb18-107" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-108"><a href="#cb18-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-109"><a href="#cb18-109" aria-hidden="true" tabindex="-1"></a><span class="fu"># Day 1 — The scaffold</span></span>
+<span id="cb18-110"><a href="#cb18-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-111"><a href="#cb18-111" aria-hidden="true" tabindex="-1"></a>What you built yesterday is a **project**, not a folder. The difference:</span>
+<span id="cb18-112"><a href="#cb18-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-115"><a href="#cb18-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-116"><a href="#cb18-116" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-project-folders</span></span>
+<span id="cb18-117"><a href="#cb18-117" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "What every folder in this project does."</span></span>
+<span id="cb18-118"><a href="#cb18-118" aria-hidden="true" tabindex="-1"></a>folder_overview <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb18-119"><a href="#cb18-119" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Folder,        <span class="sc">~</span>Purpose,</span>
+<span id="cb18-120"><a href="#cb18-120" aria-hidden="true" tabindex="-1"></a>  <span class="st">"R/"</span>,           <span class="st">"Code: numbered scripts + reusable functions."</span>,</span>
+<span id="cb18-121"><a href="#cb18-121" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/mock/"</span>,   <span class="st">"Synthetic, committed, LLM-safe data."</span>,</span>
+<span id="cb18-122"><a href="#cb18-122" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/raw/"</span>,    <span class="st">"Real data. Gitignored."</span>,</span>
+<span id="cb18-123"><a href="#cb18-123" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/processed/"</span>, <span class="st">"Output of cleaning. Reproducible, gitignored."</span>,</span>
+<span id="cb18-124"><a href="#cb18-124" aria-hidden="true" tabindex="-1"></a>  <span class="st">"reports/"</span>,     <span class="st">"Quarto sources (this file)."</span>,</span>
+<span id="cb18-125"><a href="#cb18-125" aria-hidden="true" tabindex="-1"></a>  <span class="st">"docs/"</span>,        <span class="st">"Rendered website. GitHub Pages target."</span>,</span>
+<span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a>  <span class="st">"manuscript/"</span>,  <span class="st">"LaTeX paper."</span>,</span>
+<span id="cb18-127"><a href="#cb18-127" aria-hidden="true" tabindex="-1"></a>  <span class="st">"shiny/"</span>,       <span class="st">"Interactive app."</span>,</span>
+<span id="cb18-128"><a href="#cb18-128" aria-hidden="true" tabindex="-1"></a>  <span class="st">"references/"</span>,  <span class="st">"One .bib file used by both Quarto and LaTeX."</span>,</span>
+<span id="cb18-129"><a href="#cb18-129" aria-hidden="true" tabindex="-1"></a>  <span class="st">"figures/"</span>,     <span class="st">"Plots saved by scripts, shared by every output."</span></span>
+<span id="cb18-130"><a href="#cb18-130" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-131"><a href="#cb18-131" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(folder_overview)</span>
+<span id="cb18-132"><a href="#cb18-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-133"><a href="#cb18-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-134"><a href="#cb18-134" aria-hidden="true" tabindex="-1"></a>You also wrote a smart <span class="in">`.gitignore`</span> so real data can never be committed by</span>
+<span id="cb18-135"><a href="#cb18-135" aria-hidden="true" tabindex="-1"></a>accident, and an <span class="in">`.Renviron.example`</span> with one switch:</span>
+<span id="cb18-136"><a href="#cb18-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-137"><a href="#cb18-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-138"><a href="#cb18-138" aria-hidden="true" tabindex="-1"></a><span class="in">DATA_MODE=mock   # default — read from data/mock/</span></span>
+<span id="cb18-139"><a href="#cb18-139" aria-hidden="true" tabindex="-1"></a><span class="in">DATA_MODE=real   # only when you mean it — read from data/raw/</span></span>
+<span id="cb18-140"><a href="#cb18-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-141"><a href="#cb18-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-142"><a href="#cb18-142" aria-hidden="true" tabindex="-1"></a>Everything that follows in this document reads through <span class="in">`data_path()`</span>. Flip</span>
+<span id="cb18-143"><a href="#cb18-143" aria-hidden="true" tabindex="-1"></a><span class="in">`DATA_MODE`</span> and the entire analysis re-runs on a different dataset, with no</span>
+<span id="cb18-144"><a href="#cb18-144" aria-hidden="true" tabindex="-1"></a>edits to any script.</span>
+<span id="cb18-145"><a href="#cb18-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-146"><a href="#cb18-146" aria-hidden="true" tabindex="-1"></a><span class="fu"># Day 2 — From raw to results</span></span>
+<span id="cb18-147"><a href="#cb18-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-148"><a href="#cb18-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load the raw data</span></span>
+<span id="cb18-149"><a href="#cb18-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-153"><a href="#cb18-153" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-raw</span></span>
+<span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">load_raw_consumer_data</span>(<span class="st">"consumer_data_raw.csv"</span>)</span>
+<span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(raw)</span>
+<span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a>The CSV is full of realistic mess: mixed-case column names, trailing</span>
+<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a>whitespace, <span class="in">`-99`</span> missing codes, inconsistent gender labels, a reverse-scored</span>
+<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a>item, scattered <span class="in">`NA`</span>s. See <span class="co">[</span><span class="ot">`data/mock/codebook.md`</span><span class="co">](../data/mock/codebook.md)</span></span>
+<span id="cb18-161"><a href="#cb18-161" aria-hidden="true" tabindex="-1"></a>for the full inventory.</span>
+<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## Clean it</span></span>
+<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a>The cleaning logic lives in <span class="co">[</span><span class="ot">`R/functions/data_loading.R`</span><span class="co">](../R/functions/data_loading.R)</span> so</span>
+<span id="cb18-166"><a href="#cb18-166" aria-hidden="true" tabindex="-1"></a>the cleaning script, this walkthrough, and the Shiny app all share one</span>
+<span id="cb18-167"><a href="#cb18-167" aria-hidden="true" tabindex="-1"></a>implementation:</span>
+<span id="cb18-168"><a href="#cb18-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: clean</span></span>
+<span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a>clean <span class="ot">&lt;-</span> <span class="fu">clean_consumer_data</span>(raw)</span>
+<span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(clean, participant_id, condition, gender,</span>
+<span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a>                             income_group, purchase_intention,</span>
+<span id="cb18-176"><a href="#cb18-176" aria-hidden="true" tabindex="-1"></a>                             perceived_value, price_sensitivity))</span>
+<span id="cb18-177"><a href="#cb18-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-178"><a href="#cb18-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-179"><a href="#cb18-179" aria-hidden="true" tabindex="-1"></a>What <span class="in">`clean_consumer_data()`</span> does (see source for the details): standardises</span>
+<span id="cb18-180"><a href="#cb18-180" aria-hidden="true" tabindex="-1"></a>column names with <span class="in">`janitor::clean_names()`</span>, trims whitespace, recodes gender,</span>
+<span id="cb18-181"><a href="#cb18-181" aria-hidden="true" tabindex="-1"></a>turns <span class="in">`-99`</span> into <span class="in">`NA`</span>, reverses <span class="in">`bt_3_r`</span>, and averages each item set into a</span>
+<span id="cb18-182"><a href="#cb18-182" aria-hidden="true" tabindex="-1"></a>scale score.</span>
+<span id="cb18-183"><a href="#cb18-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-184"><a href="#cb18-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## Descriptives</span></span>
+<span id="cb18-185"><a href="#cb18-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-188"><a href="#cb18-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-189"><a href="#cb18-189" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-desc</span></span>
+<span id="cb18-190"><a href="#cb18-190" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Outcomes by experimental condition."</span></span>
+<span id="cb18-191"><a href="#cb18-191" aria-hidden="true" tabindex="-1"></a>desc <span class="ot">&lt;-</span> <span class="fu">descriptives_by_condition</span>(clean)</span>
+<span id="cb18-192"><a href="#cb18-192" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(desc, <span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb18-193"><a href="#cb18-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-194"><a href="#cb18-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-195"><a href="#cb18-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visual first, model second</span></span>
+<span id="cb18-196"><a href="#cb18-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-199"><a href="#cb18-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-200"><a href="#cb18-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-pi-by-cond</span></span>
+<span id="cb18-201"><a href="#cb18-201" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Purchase intention by condition. Red points are condition means; bars are 95% CIs."</span></span>
+<span id="cb18-202"><a href="#cb18-202" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 7</span></span>
+<span id="cb18-203"><a href="#cb18-203" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
+<span id="cb18-204"><a href="#cb18-204" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_pi_by_condition</span>(clean)</span>
+<span id="cb18-205"><a href="#cb18-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-206"><a href="#cb18-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-207"><a href="#cb18-207" aria-hidden="true" tabindex="-1"></a><span class="in">`combined_frame`</span> shows a clear bump over <span class="in">`control`</span>. The scatter below</span>
+<span id="cb18-208"><a href="#cb18-208" aria-hidden="true" tabindex="-1"></a>suggests why: the conditions also raise <span class="in">`perceived_value`</span>, and perceived</span>
+<span id="cb18-209"><a href="#cb18-209" aria-hidden="true" tabindex="-1"></a>value strongly predicts purchase intention.</span>
 <span id="cb18-210"><a href="#cb18-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-211"><a href="#cb18-211" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mediation: condition → perceived value → purchase intention</span></span>
-<span id="cb18-212"><a href="#cb18-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-213"><a href="#cb18-213" aria-hidden="true" tabindex="-1"></a>Three regressions tell the conceptual mediation story <span class="co">[</span><span class="ot">@baron1986; @hayes2017</span><span class="co">]</span>:</span>
-<span id="cb18-214"><a href="#cb18-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-217"><a href="#cb18-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-218"><a href="#cb18-218" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-mediation</span></span>
-<span id="cb18-219"><a href="#cb18-219" aria-hidden="true" tabindex="-1"></a>med <span class="ot">&lt;-</span> <span class="fu">fit_mediation_models</span>(clean)</span>
+<span id="cb18-213"><a href="#cb18-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-214"><a href="#cb18-214" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-mediation-scatter</span></span>
+<span id="cb18-215"><a href="#cb18-215" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Perceived value (mediator) versus purchase intention (outcome), by condition."</span></span>
+<span id="cb18-216"><a href="#cb18-216" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 7</span></span>
+<span id="cb18-217"><a href="#cb18-217" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
+<span id="cb18-218"><a href="#cb18-218" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_mediation_scatter</span>(clean)</span>
+<span id="cb18-219"><a href="#cb18-219" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-220"><a href="#cb18-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-221"><a href="#cb18-221" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
-<span id="cb18-222"><a href="#cb18-222" aria-hidden="true" tabindex="-1"></a>  <span class="at">total       =</span> broom<span class="sc">::</span><span class="fu">tidy</span>(med<span class="sc">$</span>total, <span class="at">conf.int =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-223"><a href="#cb18-223" aria-hidden="true" tabindex="-1"></a>  <span class="at">mediator    =</span> broom<span class="sc">::</span><span class="fu">tidy</span>(med<span class="sc">$</span>a,     <span class="at">conf.int =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-224"><a href="#cb18-224" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome_w_m =</span> broom<span class="sc">::</span><span class="fu">tidy</span>(med<span class="sc">$</span>b,     <span class="at">conf.int =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-225"><a href="#cb18-225" aria-hidden="true" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">"model"</span></span>
-<span id="cb18-226"><a href="#cb18-226" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb18-227"><a href="#cb18-227" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"condition|perceived_value"</span>, term)) <span class="sc">|&gt;</span></span>
-<span id="cb18-228"><a href="#cb18-228" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb18-221"><a href="#cb18-221" aria-hidden="true" tabindex="-1"></a><span class="fu">## Main effect: condition predicts purchase intention</span></span>
+<span id="cb18-222"><a href="#cb18-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-225"><a href="#cb18-225" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-226"><a href="#cb18-226" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-main-model</span></span>
+<span id="cb18-227"><a href="#cb18-227" aria-hidden="true" tabindex="-1"></a>fit_main <span class="ot">&lt;-</span> <span class="fu">fit_main_model</span>(clean)</span>
+<span id="cb18-228"><a href="#cb18-228" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(broom<span class="sc">::</span><span class="fu">tidy</span>(fit_main, <span class="at">conf.int =</span> <span class="cn">TRUE</span>), <span class="at">digits =</span> <span class="dv">3</span>)</span>
 <span id="cb18-229"><a href="#cb18-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-230"><a href="#cb18-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-231"><a href="#cb18-231" aria-hidden="true" tabindex="-1"></a>The pattern to read for in the table: the condition coefficients in</span>
-<span id="cb18-232"><a href="#cb18-232" aria-hidden="true" tabindex="-1"></a><span class="in">`outcome_w_m`</span> are **smaller** than in <span class="in">`total`</span>, and <span class="in">`perceived_value`</span> is a</span>
-<span id="cb18-233"><a href="#cb18-233" aria-hidden="true" tabindex="-1"></a>significant predictor — that's a mediation signature.</span>
+<span id="cb18-231"><a href="#cb18-231" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mediation: condition → perceived value → purchase intention</span></span>
+<span id="cb18-232"><a href="#cb18-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-233"><a href="#cb18-233" aria-hidden="true" tabindex="-1"></a>Three regressions tell the conceptual mediation story <span class="co">[</span><span class="ot">@baron1986; @hayes2017</span><span class="co">]</span>:</span>
 <span id="cb18-234"><a href="#cb18-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-235"><a href="#cb18-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Moderation: price sensitivity weakens the effect</span></span>
-<span id="cb18-236"><a href="#cb18-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-239"><a href="#cb18-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-240"><a href="#cb18-240" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-moderation</span></span>
-<span id="cb18-241"><a href="#cb18-241" aria-hidden="true" tabindex="-1"></a>fit_mod <span class="ot">&lt;-</span> <span class="fu">fit_moderation_model</span>(clean)</span>
-<span id="cb18-242"><a href="#cb18-242" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb18-243"><a href="#cb18-243" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(fit_mod, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb18-244"><a href="#cb18-244" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"condition|price"</span>, term)),</span>
-<span id="cb18-245"><a href="#cb18-245" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span></span>
-<span id="cb18-246"><a href="#cb18-246" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-247"><a href="#cb18-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-248"><a href="#cb18-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-251"><a href="#cb18-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-252"><a href="#cb18-252" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-moderation</span></span>
-<span id="cb18-253"><a href="#cb18-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Condition × price sensitivity. The combined-frame boost shrinks for high-price-sensitive consumers."</span></span>
-<span id="cb18-254"><a href="#cb18-254" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 7</span></span>
-<span id="cb18-255"><a href="#cb18-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
-<span id="cb18-256"><a href="#cb18-256" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_moderation</span>(clean)</span>
-<span id="cb18-257"><a href="#cb18-257" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-258"><a href="#cb18-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-259"><a href="#cb18-259" aria-hidden="true" tabindex="-1"></a><span class="fu"># Day 3 — Where does this go?</span></span>
-<span id="cb18-260"><a href="#cb18-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-261"><a href="#cb18-261" aria-hidden="true" tabindex="-1"></a>You're reading the Day 3 output right now. The same <span class="in">`.qmd`</span> you're looking at</span>
-<span id="cb18-262"><a href="#cb18-262" aria-hidden="true" tabindex="-1"></a>becomes:</span>
-<span id="cb18-263"><a href="#cb18-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-264"><a href="#cb18-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**An HTML website** in <span class="in">`docs/`</span>, served by GitHub Pages.</span>
-<span id="cb18-265"><a href="#cb18-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**A PDF** ready to paste figures from into the LaTeX manuscript.</span>
-<span id="cb18-266"><a href="#cb18-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**A Word document** for collaborators who don't use git.</span>
-<span id="cb18-267"><a href="#cb18-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-268"><a href="#cb18-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## The connectedness — what got reused, not copied</span></span>
-<span id="cb18-269"><a href="#cb18-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-270"><a href="#cb18-270" aria-hidden="true" tabindex="-1"></a>Every piece of this document came from somewhere else in the repo:</span>
-<span id="cb18-271"><a href="#cb18-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-272"><a href="#cb18-272" aria-hidden="true" tabindex="-1"></a>| Element on this page | Where it lives | Used by who else |</span>
-<span id="cb18-273"><a href="#cb18-273" aria-hidden="true" tabindex="-1"></a>| --- | --- | --- |</span>
-<span id="cb18-274"><a href="#cb18-274" aria-hidden="true" tabindex="-1"></a>| Variable names (<span class="in">`outcome_var`</span>, …) | <span class="co">[</span><span class="ot">`R/01_setup.R`</span><span class="co">](../R/01_setup.R)</span> | Every R script + Shiny app |</span>
-<span id="cb18-275"><a href="#cb18-275" aria-hidden="true" tabindex="-1"></a>| <span class="in">`clean_consumer_data()`</span> | <span class="co">[</span><span class="ot">`R/functions/data_loading.R`</span><span class="co">](../R/functions/data_loading.R)</span> | <span class="in">`02_data_processing.R`</span>, Shiny app |</span>
-<span id="cb18-276"><a href="#cb18-276" aria-hidden="true" tabindex="-1"></a>| <span class="in">`fit_main_model()`</span>, <span class="in">`fit_mediation_models()`</span> | <span class="co">[</span><span class="ot">`R/functions/analysis.R`</span><span class="co">](../R/functions/analysis.R)</span> | <span class="in">`03_analysis.R`</span>, manuscript |</span>
-<span id="cb18-277"><a href="#cb18-277" aria-hidden="true" tabindex="-1"></a>| <span class="in">`plot_pi_by_condition()`</span> etc. | <span class="co">[</span><span class="ot">`R/functions/plotting.R`</span><span class="co">](../R/functions/plotting.R)</span> | <span class="in">`03_analysis.R`</span> (figures saved to <span class="in">`figures/`</span>) |</span>
-<span id="cb18-278"><a href="#cb18-278" aria-hidden="true" tabindex="-1"></a>| Citations <span class="in">`[@baron1986]`</span> | <span class="co">[</span><span class="ot">`references/references.bib`</span><span class="co">](../references/references.bib)</span> | This file + the LaTeX manuscript |</span>
-<span id="cb18-279"><a href="#cb18-279" aria-hidden="true" tabindex="-1"></a>| Mock data | <span class="co">[</span><span class="ot">`data/mock/`</span><span class="co">](../data/mock/)</span> | This file + Shiny app + LLM on Day 3 |</span>
+<span id="cb18-237"><a href="#cb18-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-238"><a href="#cb18-238" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-mediation</span></span>
+<span id="cb18-239"><a href="#cb18-239" aria-hidden="true" tabindex="-1"></a>med <span class="ot">&lt;-</span> <span class="fu">fit_mediation_models</span>(clean)</span>
+<span id="cb18-240"><a href="#cb18-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-241"><a href="#cb18-241" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
+<span id="cb18-242"><a href="#cb18-242" aria-hidden="true" tabindex="-1"></a>  <span class="at">total       =</span> broom<span class="sc">::</span><span class="fu">tidy</span>(med<span class="sc">$</span>total, <span class="at">conf.int =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-243"><a href="#cb18-243" aria-hidden="true" tabindex="-1"></a>  <span class="at">mediator    =</span> broom<span class="sc">::</span><span class="fu">tidy</span>(med<span class="sc">$</span>a,     <span class="at">conf.int =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-244"><a href="#cb18-244" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome_w_m =</span> broom<span class="sc">::</span><span class="fu">tidy</span>(med<span class="sc">$</span>b,     <span class="at">conf.int =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-245"><a href="#cb18-245" aria-hidden="true" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">"model"</span></span>
+<span id="cb18-246"><a href="#cb18-246" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb18-247"><a href="#cb18-247" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"condition|perceived_value"</span>, term)) <span class="sc">|&gt;</span></span>
+<span id="cb18-248"><a href="#cb18-248" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb18-249"><a href="#cb18-249" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-250"><a href="#cb18-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-251"><a href="#cb18-251" aria-hidden="true" tabindex="-1"></a>The pattern to read for in the table: the condition coefficients in</span>
+<span id="cb18-252"><a href="#cb18-252" aria-hidden="true" tabindex="-1"></a><span class="in">`outcome_w_m`</span> are **smaller** than in <span class="in">`total`</span>, and <span class="in">`perceived_value`</span> is a</span>
+<span id="cb18-253"><a href="#cb18-253" aria-hidden="true" tabindex="-1"></a>significant predictor — that's a mediation signature.</span>
+<span id="cb18-254"><a href="#cb18-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-255"><a href="#cb18-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## Moderation: price sensitivity weakens the effect</span></span>
+<span id="cb18-256"><a href="#cb18-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-259"><a href="#cb18-259" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-260"><a href="#cb18-260" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-moderation</span></span>
+<span id="cb18-261"><a href="#cb18-261" aria-hidden="true" tabindex="-1"></a>fit_mod <span class="ot">&lt;-</span> <span class="fu">fit_moderation_model</span>(clean)</span>
+<span id="cb18-262"><a href="#cb18-262" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb18-263"><a href="#cb18-263" aria-hidden="true" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(fit_mod, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-264"><a href="#cb18-264" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"condition|price"</span>, term)),</span>
+<span id="cb18-265"><a href="#cb18-265" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span></span>
+<span id="cb18-266"><a href="#cb18-266" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-267"><a href="#cb18-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-268"><a href="#cb18-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-271"><a href="#cb18-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-272"><a href="#cb18-272" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-moderation</span></span>
+<span id="cb18-273"><a href="#cb18-273" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Condition × price sensitivity. The combined-frame boost shrinks for high-price-sensitive consumers."</span></span>
+<span id="cb18-274"><a href="#cb18-274" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 7</span></span>
+<span id="cb18-275"><a href="#cb18-275" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
+<span id="cb18-276"><a href="#cb18-276" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_moderation</span>(clean)</span>
+<span id="cb18-277"><a href="#cb18-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-278"><a href="#cb18-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-279"><a href="#cb18-279" aria-hidden="true" tabindex="-1"></a><span class="fu"># Day 3 — Where does this go?</span></span>
 <span id="cb18-280"><a href="#cb18-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-281"><a href="#cb18-281" aria-hidden="true" tabindex="-1"></a>If you renamed <span class="in">`purchase_intention`</span> to <span class="in">`intent_to_buy`</span>, you would change it</span>
-<span id="cb18-282"><a href="#cb18-282" aria-hidden="true" tabindex="-1"></a>in <span class="in">`R/01_setup.R`</span> and <span class="in">`R/functions/data_loading.R`</span> — **two files** — and</span>
-<span id="cb18-283"><a href="#cb18-283" aria-hidden="true" tabindex="-1"></a>every figure, table, PDF, website page, and the Shiny app would follow.</span>
-<span id="cb18-284"><a href="#cb18-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-285"><a href="#cb18-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## What happens when you point this at real data</span></span>
-<span id="cb18-286"><a href="#cb18-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-287"><a href="#cb18-287" aria-hidden="true" tabindex="-1"></a>Set <span class="in">`DATA_MODE=real`</span> in your <span class="in">`.Renviron`</span>. Re-render. Same code, same</span>
-<span id="cb18-288"><a href="#cb18-288" aria-hidden="true" tabindex="-1"></a>analysis, real numbers.</span>
+<span id="cb18-281"><a href="#cb18-281" aria-hidden="true" tabindex="-1"></a>You're reading the Day 3 output right now. The same <span class="in">`.qmd`</span> you're looking at</span>
+<span id="cb18-282"><a href="#cb18-282" aria-hidden="true" tabindex="-1"></a>becomes:</span>
+<span id="cb18-283"><a href="#cb18-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-284"><a href="#cb18-284" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**An HTML website** in <span class="in">`docs/`</span>, served by GitHub Pages.</span>
+<span id="cb18-285"><a href="#cb18-285" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**A PDF** ready to paste figures from into the LaTeX manuscript.</span>
+<span id="cb18-286"><a href="#cb18-286" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**A Word document** for collaborators who don't use git.</span>
+<span id="cb18-287"><a href="#cb18-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-288"><a href="#cb18-288" aria-hidden="true" tabindex="-1"></a><span class="fu">## The connectedness — what got reused, not copied</span></span>
 <span id="cb18-289"><a href="#cb18-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-290"><a href="#cb18-290" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb18-291"><a href="#cb18-291" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'DATA_MODE=real'</span> <span class="op">&gt;&gt;</span> .Renviron</span>
-<span id="cb18-292"><a href="#cb18-292" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd</span>
-<span id="cb18-293"><a href="#cb18-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-294"><a href="#cb18-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-295"><a href="#cb18-295" aria-hidden="true" tabindex="-1"></a>The mock workflow is the rehearsal. The real workflow is one env var away.</span>
-<span id="cb18-296"><a href="#cb18-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-297"><a href="#cb18-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## On Day 3 you also brought in the LLM</span></span>
-<span id="cb18-298"><a href="#cb18-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-299"><a href="#cb18-299" aria-hidden="true" tabindex="-1"></a>If you opened this repo with the LLM-mode workspace</span>
-<span id="cb18-300"><a href="#cb18-300" aria-hidden="true" tabindex="-1"></a>(<span class="in">`the-science-repository.llm.code-workspace`</span>), your assistant can see this</span>
-<span id="cb18-301"><a href="#cb18-301" aria-hidden="true" tabindex="-1"></a>file and <span class="in">`data/mock/`</span> but **not** <span class="in">`data/raw/`</span> or <span class="in">`data/processed/`</span>.</span>
-<span id="cb18-302"><a href="#cb18-302" aria-hidden="true" tabindex="-1"></a>That's not a vibe; it's enforced by:</span>
-<span id="cb18-303"><a href="#cb18-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-304"><a href="#cb18-304" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The workspace file's <span class="in">`files.exclude`</span> (editor-level hiding).</span>
-<span id="cb18-305"><a href="#cb18-305" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`.claude/settings.json`</span>'s <span class="in">`permissions.deny`</span> (tool-level blocking).</span>
+<span id="cb18-290"><a href="#cb18-290" aria-hidden="true" tabindex="-1"></a>Every piece of this document came from somewhere else in the repo:</span>
+<span id="cb18-291"><a href="#cb18-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-292"><a href="#cb18-292" aria-hidden="true" tabindex="-1"></a>| Element on this page | Where it lives | Used by who else |</span>
+<span id="cb18-293"><a href="#cb18-293" aria-hidden="true" tabindex="-1"></a>| --- | --- | --- |</span>
+<span id="cb18-294"><a href="#cb18-294" aria-hidden="true" tabindex="-1"></a>| Variable names (<span class="in">`outcome_var`</span>, …) | <span class="co">[</span><span class="ot">`R/01_setup.R`</span><span class="co">](../R/01_setup.R)</span> | Every R script + Shiny app |</span>
+<span id="cb18-295"><a href="#cb18-295" aria-hidden="true" tabindex="-1"></a>| <span class="in">`clean_consumer_data()`</span> | <span class="co">[</span><span class="ot">`R/functions/data_loading.R`</span><span class="co">](../R/functions/data_loading.R)</span> | <span class="in">`02_data_processing.R`</span>, Shiny app |</span>
+<span id="cb18-296"><a href="#cb18-296" aria-hidden="true" tabindex="-1"></a>| <span class="in">`fit_main_model()`</span>, <span class="in">`fit_mediation_models()`</span> | <span class="co">[</span><span class="ot">`R/functions/analysis.R`</span><span class="co">](../R/functions/analysis.R)</span> | <span class="in">`03_analysis.R`</span>, manuscript |</span>
+<span id="cb18-297"><a href="#cb18-297" aria-hidden="true" tabindex="-1"></a>| <span class="in">`plot_pi_by_condition()`</span> etc. | <span class="co">[</span><span class="ot">`R/functions/plotting.R`</span><span class="co">](../R/functions/plotting.R)</span> | <span class="in">`03_analysis.R`</span> (figures saved to <span class="in">`figures/`</span>) |</span>
+<span id="cb18-298"><a href="#cb18-298" aria-hidden="true" tabindex="-1"></a>| Citations <span class="in">`[@baron1986]`</span> | <span class="co">[</span><span class="ot">`references/references.bib`</span><span class="co">](../references/references.bib)</span> | This file + the LaTeX manuscript |</span>
+<span id="cb18-299"><a href="#cb18-299" aria-hidden="true" tabindex="-1"></a>| Mock data | <span class="co">[</span><span class="ot">`data/mock/`</span><span class="co">](../data/mock/)</span> | This file + Shiny app + LLM on Day 3 |</span>
+<span id="cb18-300"><a href="#cb18-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-301"><a href="#cb18-301" aria-hidden="true" tabindex="-1"></a>If you renamed <span class="in">`purchase_intention`</span> to <span class="in">`intent_to_buy`</span>, you would change it</span>
+<span id="cb18-302"><a href="#cb18-302" aria-hidden="true" tabindex="-1"></a>in <span class="in">`R/01_setup.R`</span> and <span class="in">`R/functions/data_loading.R`</span> — **two files** — and</span>
+<span id="cb18-303"><a href="#cb18-303" aria-hidden="true" tabindex="-1"></a>every figure, table, PDF, website page, and the Shiny app would follow.</span>
+<span id="cb18-304"><a href="#cb18-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-305"><a href="#cb18-305" aria-hidden="true" tabindex="-1"></a><span class="fu">## What happens when you point this at real data</span></span>
 <span id="cb18-306"><a href="#cb18-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-307"><a href="#cb18-307" aria-hidden="true" tabindex="-1"></a>So you can ask Claude to "improve the moderation plot" and it can do the job</span>
-<span id="cb18-308"><a href="#cb18-308" aria-hidden="true" tabindex="-1"></a>against synthetic data without ever touching the real one.</span>
+<span id="cb18-307"><a href="#cb18-307" aria-hidden="true" tabindex="-1"></a>Set <span class="in">`DATA_MODE=real`</span> in your <span class="in">`.Renviron`</span>. Re-render. Same code, same</span>
+<span id="cb18-308"><a href="#cb18-308" aria-hidden="true" tabindex="-1"></a>analysis, real numbers.</span>
 <span id="cb18-309"><a href="#cb18-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-310"><a href="#cb18-310" aria-hidden="true" tabindex="-1"></a><span class="fu"># Where to take this next</span></span>
-<span id="cb18-311"><a href="#cb18-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-312"><a href="#cb18-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Add a new analysis: write a function in <span class="co">[</span><span class="ot">`R/functions/`</span><span class="co">](../R/functions/)</span>,</span>
-<span id="cb18-313"><a href="#cb18-313" aria-hidden="true" tabindex="-1"></a>  call it from <span class="co">[</span><span class="ot">`R/03_analysis.R`</span><span class="co">](../R/03_analysis.R)</span> and from a new section</span>
-<span id="cb18-314"><a href="#cb18-314" aria-hidden="true" tabindex="-1"></a>  here. **Don't copy code.**</span>
-<span id="cb18-315"><a href="#cb18-315" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Add a new outcome: extend <span class="in">`descriptives_by_condition()`</span> and re-render.</span>
-<span id="cb18-316"><a href="#cb18-316" aria-hidden="true" tabindex="-1"></a>  All tables update.</span>
-<span id="cb18-317"><a href="#cb18-317" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write the paper: open <span class="co">[</span><span class="ot">`manuscript/main.tex`</span><span class="co">](../manuscript/main.tex)</span>. It</span>
-<span id="cb18-318"><a href="#cb18-318" aria-hidden="true" tabindex="-1"></a>  uses the same <span class="in">`figures/`</span> and <span class="in">`references/references.bib`</span>.</span>
-<span id="cb18-319"><a href="#cb18-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-320"><a href="#cb18-320" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb18-321"><a href="#cb18-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-322"><a href="#cb18-322" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb18-323"><a href="#cb18-323" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb18-310"><a href="#cb18-310" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb18-311"><a href="#cb18-311" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'DATA_MODE=real'</span> <span class="op">&gt;&gt;</span> .Renviron</span>
+<span id="cb18-312"><a href="#cb18-312" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render reports/00_walkthrough.qmd</span>
+<span id="cb18-313"><a href="#cb18-313" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-314"><a href="#cb18-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-315"><a href="#cb18-315" aria-hidden="true" tabindex="-1"></a>The mock workflow is the rehearsal. The real workflow is one env var away.</span>
+<span id="cb18-316"><a href="#cb18-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-317"><a href="#cb18-317" aria-hidden="true" tabindex="-1"></a><span class="fu">## On Day 3 you also brought in the LLM</span></span>
+<span id="cb18-318"><a href="#cb18-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-319"><a href="#cb18-319" aria-hidden="true" tabindex="-1"></a>If you opened this repo with the LLM-mode workspace</span>
+<span id="cb18-320"><a href="#cb18-320" aria-hidden="true" tabindex="-1"></a>(<span class="in">`the-science-repository.llm.code-workspace`</span>), your assistant can see this</span>
+<span id="cb18-321"><a href="#cb18-321" aria-hidden="true" tabindex="-1"></a>file and <span class="in">`data/mock/`</span> but **not** <span class="in">`data/raw/`</span> or <span class="in">`data/processed/`</span>.</span>
+<span id="cb18-322"><a href="#cb18-322" aria-hidden="true" tabindex="-1"></a>That's not a vibe; it's enforced by:</span>
+<span id="cb18-323"><a href="#cb18-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-324"><a href="#cb18-324" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The workspace file's <span class="in">`files.exclude`</span> (editor-level hiding).</span>
+<span id="cb18-325"><a href="#cb18-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`.claude/settings.json`</span>'s <span class="in">`permissions.deny`</span> (tool-level blocking).</span>
+<span id="cb18-326"><a href="#cb18-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-327"><a href="#cb18-327" aria-hidden="true" tabindex="-1"></a>So you can ask Claude to "improve the moderation plot" and it can do the job</span>
+<span id="cb18-328"><a href="#cb18-328" aria-hidden="true" tabindex="-1"></a>against synthetic data without ever touching the real one.</span>
+<span id="cb18-329"><a href="#cb18-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-330"><a href="#cb18-330" aria-hidden="true" tabindex="-1"></a><span class="fu"># Where to take this next</span></span>
+<span id="cb18-331"><a href="#cb18-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-332"><a href="#cb18-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Add a new analysis: write a function in <span class="co">[</span><span class="ot">`R/functions/`</span><span class="co">](../R/functions/)</span>,</span>
+<span id="cb18-333"><a href="#cb18-333" aria-hidden="true" tabindex="-1"></a>  call it from <span class="co">[</span><span class="ot">`R/03_analysis.R`</span><span class="co">](../R/03_analysis.R)</span> and from a new section</span>
+<span id="cb18-334"><a href="#cb18-334" aria-hidden="true" tabindex="-1"></a>  here. **Don't copy code.**</span>
+<span id="cb18-335"><a href="#cb18-335" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Add a new outcome: extend <span class="in">`descriptives_by_condition()`</span> and re-render.</span>
+<span id="cb18-336"><a href="#cb18-336" aria-hidden="true" tabindex="-1"></a>  All tables update.</span>
+<span id="cb18-337"><a href="#cb18-337" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write the paper: open <span class="co">[</span><span class="ot">`manuscript/main.tex`</span><span class="co">](../manuscript/main.tex)</span>. It</span>
+<span id="cb18-338"><a href="#cb18-338" aria-hidden="true" tabindex="-1"></a>  uses the same <span class="in">`figures/`</span> and <span class="in">`references/references.bib`</span>.</span>
+<span id="cb18-339"><a href="#cb18-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-340"><a href="#cb18-340" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb18-341"><a href="#cb18-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-342"><a href="#cb18-342" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb18-343"><a href="#cb18-343" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

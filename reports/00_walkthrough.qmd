@@ -53,36 +53,56 @@ you render. No copy-paste.
 
 ## How to render
 
-One command, three folders:
+One source file, three formats, three commands:
 
 ```bash
-quarto render
+quarto render reports/00_walkthrough.qmd --to html   # -> docs/reports/00_walkthrough.html
+quarto render reports/00_walkthrough.qmd --to pdf    # -> manuscript/output/walkthrough.pdf
+quarto render reports/00_walkthrough.qmd --to docx   # -> manuscript/output/walkthrough.docx
 ```
 
-| Output | Lands in |
-| --- | --- |
-| `00_walkthrough.html` (and the rest of the site) | [`docs/`](../docs/) → GitHub Pages |
-| `walkthrough.pdf` | [`manuscript/output/`](../manuscript/output/) |
-| `walkthrough.docx` | [`manuscript/output/`](../manuscript/output/) |
+Or render all three in one go: `quarto render reports/00_walkthrough.qmd`.
 
-The HTML/PDF/DOCX split is one source file, three formats. A post-render
-script ([`scripts/post_render.R`](../scripts/post_render.R)) moves the PDF
-and DOCX out of `docs/` and into `manuscript/output/` so the site folder
-stays HTML-only.
+### How does Quarto know where each format goes?
 
-**PDF requires a LaTeX engine.** One-time setup:
+It doesn't, on its own. Quarto puts **every** rendered file under
+`output-dir: docs` (set in [`_quarto.yml`](../_quarto.yml)). Routing then
+happens in two small steps:
+
+1. **`output-dir: docs`** sends all output to `docs/`. After a render, you
+   would see `docs/reports/00_walkthrough.html`, `docs/reports/walkthrough.pdf`,
+   `docs/reports/walkthrough.docx`.
+2. **A post-render script** ([`scripts/post_render.R`](../scripts/post_render.R))
+   runs after every render and moves the `.pdf` and `.docx` files out of
+   `docs/` and into `manuscript/output/`. HTML stays put.
+
+That post-render hook is wired in `_quarto.yml`:
+
+```yaml
+project:
+  type: website
+  output-dir: docs
+  post-render:
+    - scripts/post_render.R
+```
+
+Quarto sets the environment variable `QUARTO_PROJECT_OUTPUT_FILES` to the
+list of files it just produced. The R script reads that variable, picks the
+`.pdf` and `.docx` entries, and moves them. The whole thing is ~20 lines —
+read it if you want to add a third destination later (e.g., `slides/` for
+RevealJS).
+
+### PDF prerequisite
+
+PDF needs a LaTeX engine. One-time setup:
 
 ```r
 install.packages("tinytex")
 tinytex::install_tinytex()
 ```
 
-To render only a subset of formats (e.g., if tinytex isn't installed):
-
-```bash
-quarto render reports/00_walkthrough.qmd --to html
-quarto render reports/00_walkthrough.qmd --to html,docx
-```
+If you skip this, the `--to pdf` command will fail but `--to html` and
+`--to docx` will keep working.
 
 ---
 
