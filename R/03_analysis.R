@@ -1,6 +1,7 @@
 # 03_analysis.R -----------------------------------------------------------
 # Descriptives, main model, mediation, moderation. Saves figures to
-# `figures/` and a tidy model table to `data/processed/`.
+# `figures/`, a tidy model table to `data/processed/`, and a LaTeX table to
+# `manuscript/output/tabs/` for the paper to \input{}.
 #
 # Run after: R/02_data_processing.R
 
@@ -48,4 +49,33 @@ tidy_models <- dplyr::bind_rows(
 )
 saveRDS(tidy_models, processed_path("tidy_models.rds"))
 
-message("Analysis complete. See `figures/` and `data/processed/tidy_models.rds`.")
+# ---- 7. Generated LaTeX table for the manuscript ------------------------
+# This is the "render and push" half of the manuscript workflow: a file that
+# contains data, so R writes it and we commit it. The paper pulls it in with
+# \input{output/tabs/model_table.tex}; co-authors never touch it by hand.
+tab_dir <- here::here("manuscript", "output", "tabs")
+dir.create(tab_dir, recursive = TRUE, showWarnings = FALSE)
+
+model_table <- tidy_models |>
+  dplyr::transmute(
+    Model    = model,
+    Term     = term,
+    Estimate = round(estimate, 2),
+    SE       = round(std.error, 2),
+    `CI low` = round(conf.low, 2),
+    `CI high`= round(conf.high, 2),
+    p        = round(p.value, 3)
+  )
+
+knitr::kable(
+  model_table,
+  format    = "latex",
+  booktabs  = TRUE,
+  longtable = FALSE,
+  caption   = "Model estimates with 95\\% confidence intervals.",
+  label     = "models"
+) |>
+  writeLines(file.path(tab_dir, "model_table.tex"))
+
+message("Analysis complete. See `figures/`, `data/processed/tidy_models.rds`,",
+        " and `manuscript/output/tabs/model_table.tex`.")
