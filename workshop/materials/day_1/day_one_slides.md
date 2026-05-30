@@ -189,16 +189,18 @@ appear in their website URL later, so pick something sensible.
 4. You now have:  github.com/<your-awesome-username>/the-science-repository
 ```
 
+TOTHINKABOUT: Maybe here is a good point to also explain the difference between a fork and a branch? Fork is an independent copy, branch is supposed to contribute back to the main project.
+
 **Key sentence:**
 
 ```text
 A fork is your own independent copy. You can change it freely
-without touching the original.
+without touching the original. 
 ```
 
 **Speaker note:**
 Everyone now owns a complete copy of the template — data, engine, and outputs.
-This is the starting point for the whole three days.
+This is the starting point for the whole three days. You can pull in new changes from the original repository. You can even contribute back to the original repository. Lets say you find a cool new software, you can let us know by contributing back to the repository you forked from
 
 ---
 
@@ -221,6 +223,8 @@ In YOUR fork on GitHub:
 This is the payoff moment. The website was rendered from the code in the repo,
 and GitHub is now serving *your* copy of it. Nobody wrote any HTML — it came from
 the analysis.
+
+TOTHINKABOUT: We may need to point them before that already to the education license of github. If not I think they have to make their project public before they can turn on GitHub pages.
 
 ---
 
@@ -266,6 +270,8 @@ You forked (copied), committed (snapshotted a change), and GitHub republished.
 On Day 2 we add branches and merges so two people can work at once. Same loop,
 more people.
 
+TOTHINKABOUT: Maybe we can here already nonetheless teach about cloning so that they learn that they can have their forked version on their computer. A potential blockade may be that in the first round, they need to have set their username and email locally.
+
 ---
 
 ## Slide 12 — What must NEVER go on GitHub
@@ -307,7 +313,7 @@ data/processed/   gitignored    (cleaned data — also stays local)
 ```
 
 **Speaker note:**
-For the whole workshop we use the mock dataset, so there's no risk. In your own
+For day one of this workshop we use the mock dataset, so there's no risk. Tomorrow you can also bring your own data if you want to learn on your own data. In your own
 projects, `.gitignore` is the seatbelt: raw and processed data simply won't be
 pushed, even if you forget.
 
