@@ -19,7 +19,6 @@ exclude:
   - data/
   - reports/
   - references/
-  - shiny/
   - renv/
   - renv.lock
   - workshop_info/

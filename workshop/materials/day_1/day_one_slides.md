@@ -34,7 +34,7 @@ Day 3: Reporting, publication, VS Code, and hypercharge your codebase
 **Speaker note:**
 Today is not about writing R. Today is about understanding the *system* — what
 each tool does and how they fit together — and getting it all installed. If your
-setup works at the end of today, Days 2 and 3 will be smooth.
+setup works at the end of today, Days 2 and 3 will be smooth. Often learned that setting everything up is one of the hardest steps, so we are spending a day together on this to get everything up and running. Because the set-up is what even the best LLMs and AI methods cannot help you with (as long as you do not want to give them full control of your computer)
 
 ---
 
@@ -148,6 +148,8 @@ Merge   Combine work from different branches
 Don't worry about memorising. Today you'll *fork* once, then *commit* and *push*
 small changes. Branches and merges become real on Day 2 when you collaborate in
 pairs.
+
+TOTHINKABOUT: Maybe also stagging? I find this especially useful when working with LLMs. Stage before sending the prompt and see the differences
 
 ---
 
@@ -270,8 +272,6 @@ You forked (copied), committed (snapshotted a change), and GitHub republished.
 On Day 2 we add branches and merges so two people can work at once. Same loop,
 more people.
 
-TOTHINKABOUT: Maybe we can here already nonetheless teach about cloning so that they learn that they can have their forked version on their computer. A potential blockade may be that in the first round, they need to have set their username and email locally.
-
 ---
 
 ## Slide 12 — What must NEVER go on GitHub
@@ -386,6 +386,8 @@ This downloads YOUR fork and opens it as an RStudio Project.
 Cloning = downloading your GitHub copy to your machine, with its history
 attached. RStudio can do it through menus, no command line needed.
 
+TOTHINKABOUT: Maybe we can here already nonetheless teach about cloning just so they understand the difference. A potential blockade may be that in the first round, they need to have set their username and email locally.
+
 ---
 
 ## Slide 17 — Open the project, not the files
@@ -408,6 +410,8 @@ The number-one beginner trap is "R can't find my file". Opening the project
 fixes most of it, because paths are anchored to the project root, not your
 Desktop.
 
+TOTHINKABOUT: Maybe here it could also make sense to have a really short detour to show how to set up a R-project from scrap. Three options (version controlled), just in a folder, and the third one
+
 ---
 
 ## Slide 18 — RStudio in 60 seconds
@@ -426,6 +430,8 @@ Files/Plots/Packages/Help   manage files, see figures, read docs
 **Speaker note:**
 That's all you need today. We'll live in these panes properly on Day 2. For now,
 just know where the Console is — we'll type one command into it next.
+
+TOTHINKABOUT: Maybe we can show them both the console and the terminal?
 
 ---
 
@@ -447,6 +453,10 @@ Same code + different package versions = different (or broken) results.
 **Speaker note:**
 Reproducibility isn't only about your code — it's also about the exact versions
 of the tools your code depends on. This repo solves that with `renv`.
+
+TOTHINKABOUT: Maybe it can make sense to make the comparison to github? Github and git make sure your codes are versionend and reproducible; environment managers like renv make sure your libraries in your environment are versioned.
+
+TOTHINKABOUT: Maybe we can make this even clearer by saying that I have already worked on this repository and it would take a long time to install everything on every computer. renv solves this by making a snapshot of everything installed.
 
 ---
 
@@ -517,6 +527,8 @@ Every folder also has its OWN README (R/, data/, reports/, renders/...).
 If you open this project in six months, the README gets you back in. When you
 fork for your own work, you rewrite the README first.
 
+TOTHINKABOUT: Maybe it is important to make clear that this something they need to maintain?
+
 ---
 
 ## Slide 23 — Markdown, lightly
@@ -560,6 +572,8 @@ Inside .Renviron:
 stays on `mock`. The same code runs on real data later just by flipping this
 switch, with no code changes.
 
+TOTHINKABOUT: Maybe we should leave this to day 3 when we talk about LLM use in the repository? You are welcome to create a skeleton for that already and move this there if you think it makes sense.
+
 ---
 
 ## Slide 25 — The three data buckets
@@ -577,6 +591,8 @@ data/mock/       synthetic stand-in — committed, safe to share, used in the wo
 **Speaker note:**
 Raw is input you never touch. Processed is output a script creates. Mock is the
 public, synthetic version that lets us all run the same examples safely.
+
+TOTHINKABOUT: If I remember correctly the processed folder only fills up when we run a specific script. Do we need to do this before we run quarto renders? Ah no, if I remember correctly, the mock data is used for everything and creates a file in processed. If we move from mock to real data in the environment variable a different folder is used?
 
 ---
 
@@ -602,6 +618,8 @@ references/references.bib      ONE shared bibliography
 This is the "Reference management" box. You keep your library in Zotero, export a
 `.bib` file into the repo, and *both* outputs cite from the same source. Change a
 reference once, it updates everywhere.
+
+TOTHINKABOUT: I feel like the three data buckets and zotero citations come a bit as a surprise. Any idea how to make the transitions smoother? Also moving them could work?
 
 ---
 
@@ -740,6 +758,8 @@ Rule: AI supports the workflow — it does not receive confidential data.
 Light touch today — the "Coding assistants" box exists and the repo is built to
 keep raw data away from AI tools. We cover responsible AI use properly on Day 3.
 
+TOTHINKABOUT: I feel like we may not need this right now.
+
 ---
 
 ## Slide 33 — What we deliberately skipped
@@ -757,6 +777,8 @@ The Shiny app        → optional, not part of this workshop
 **Speaker note:**
 Keeping scope tight is intentional. If your setup works, you're exactly where you
 need to be.
+
+TOTHINKABOUT: I think we can remove all of the shiny app parts from this repository and the workshop. We should focus on the html output as the "interactive" output. Shiny feels like too much for this workshop.
 
 ---
 
@@ -782,6 +804,8 @@ need to be.
 Run through this as an exit check. Anyone with unticked boxes should grab the
 optional support session — Day 2 assumes all of this works.
 
+TOTHINKABOUT: I kind of like this checklist. Maybe we can start with this actually and be a bit funny: Who knows these words? After today, we hope you do.
+
 ---
 
 ## Slide 35 — Tomorrow
@@ -800,4 +824,4 @@ With the scaffold in place, tomorrow we:
 
 **Speaker note:**
 Everything we installed today becomes the workbench for Day 2. The structure you
-set up is what makes the analysis easy to follow and easy to share.
+set up is what makes the analysis easy to follow and easy to share. Bring your own data if you want.

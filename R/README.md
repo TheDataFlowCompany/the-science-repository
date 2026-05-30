@@ -3,7 +3,7 @@
 All the R lives here, and **nothing in this folder runs on its own**. It defines
 the building blocks; the reports in [`../reports/`](../reports/) call them and do
 the actual work (including any saving). One source of truth for the numbers,
-reused by the website, the manuscript, and the Shiny app.
+reused by the website and the manuscript.
 
 ## What's here
 
