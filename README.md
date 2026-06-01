@@ -45,7 +45,7 @@ the next render — nothing is copied between them.
    ```
    The manuscript render produces the data-driven methods + results in **two
    formats at once**: a LaTeX fragment and an APA-styled `methods_and_results.docx`.
-   Then compile the paper to **PDF**: open [`renders/manuscript/manuscript.tex`](renders/manuscript/) in Texifier (⌘B), or run `tinytex::latexmk("renders/manuscript/manuscript.tex")`.
+   Then compile the paper to **PDF**: open [`renders/manuscript/manuscript.tex`](renders/manuscript/) in Texifier (⌘B), or from R run `tinytex::latexmk("manuscript.tex")` **from inside `renders/manuscript/`** (e.g. `setwd("renders/manuscript"); tinytex::latexmk("manuscript.tex")`). It must run from that folder because `manuscript.tex` uses paths relative to itself (`\input{sections/…}`, `\graphicspath{{generated/}}`).
 
 ---
 
