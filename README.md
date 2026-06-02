@@ -5,7 +5,7 @@ holds the **data**, the **analysis engine**, and two polished outputs built from
 it: a **website** that shows the whole analysis transparently, and a **journal
 manuscript**. Fork it, rename it, and fill it with your own work.
 
-> 📊 **[Open the full analysis website →](https://thedataflowcompany.github.io/the-science-repository/renders/webpage/)**
+> 📊 **[Open the full analysis website](https://thedataflowcompany.github.io/the-science-repository/)**
 > Every cleaning step, figure, table, and model, rendered from the code in this repo.
 
 ---
