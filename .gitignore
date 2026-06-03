@@ -35,6 +35,7 @@ renv/staging/
 # the compiled manuscript, the whole point of the folder. (LaTeX intermediates
 # like .aux/.log are re-ignored by the block further down, even under renders/.)
 !renders/**
+!workshop/**
 
 # ---- Sensitive data ----
 # Everything under data/raw/ and data/processed/ is private by default.
